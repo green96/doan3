@@ -1,0 +1,6 @@
+/* frontend/src/pages/Home.css */
+.home {
+  background: #0f172a;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
