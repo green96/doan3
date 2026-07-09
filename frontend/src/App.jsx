@@ -1,6 +1,6 @@
 // frontend/src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { WalletProvider } from './context/WalletContext'
+import { WalletProvider } from './context/WalletContext.jsx'
 import Home from './pages/Home'
 import Profile from './pages/Profile/Profile.jsx'
 import EditProfile from './pages/Profile/EditProfile.jsx'
