@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.18.1",
     "Buffer": "^0.0.0",
     "ethers": "^6.17.0",
     "ipfs-http-client": "^60.0.1",
+    "lucide-react": "^1.23.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hot-toast": "^2.6.0",

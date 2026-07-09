@@ -34,7 +34,7 @@ export default defineConfig({
       chainType: "op",
     },
 
-    amoy: {
+     sepolia: {
       type: "http",
       chainType: "l1",
       url: configVariable("SEPOLIA_RPC_URL"),

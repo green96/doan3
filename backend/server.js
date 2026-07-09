@@ -8,7 +8,111 @@ import portfolioRoutes from './src/routes/portfolio.js';
 import blockchainRoutes from './src/routes/blockchain.js';
 import { errorHandler } from './src/middleware/errorHandler.js';
 
-dotenv.config();
+dotenv.config();// backend/server.js
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/profile_dapp', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+// Profile Schema
+const profileSchema = new mongoose.Schema({
+  address: { type: String, required: true, unique: true },
+  fullName: String,
+  bio: String,
+  email: String,
+  phone: String,
+  avatarHash: String,
+  github: String,
+  linkedin: String,
+  website: String,
+  updatedAt: { type: Date, default: Date.now }
+});
+
+const Profile = mongoose.model('Profile', profileSchema);
+
+// Routes
+app.get('/api/profiles', async (req, res) => {
+  try {
+    const profiles = await Profile.find().sort({ updatedAt: -1 }).limit(20);
+    res.json(profiles);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/profiles/:address', async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ address: req.params.address.toLowerCase() });
+    if (!profile) {
+      return res.status(404).json({ error: 'Profile not found' });
+    }
+    res.json(profile);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/profiles', async (req, res) => {
+  try {
+    const { address, ...data } = req.body;
+    const profile = await Profile.findOneAndUpdate(
+      { address: address.toLowerCase() },
+      { ...data, address: address.toLowerCase(), updatedAt: Date.now() },
+      { upsert: true, new: true }
+    );
+    res.json(profile);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.patch('/api/profiles/:address', async (req, res) => {
+  try {
+    const profile = await Profile.findOneAndUpdate(
+      { address: req.params.address.toLowerCase() },
+      { ...req.body, updatedAt: Date.now() },
+      { new: true }
+    );
+    if (!profile) {
+      return res.status(404).json({ error: 'Profile not found' });
+    }
+    res.json(profile);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/profiles/search', async (req, res) => {
+  try {
+    const { q } = req.query;
+    const profiles = await Profile.find({
+      $or: [
+        { fullName: { $regex: q, $options: 'i' } },
+        { address: { $regex: q, $options: 'i' } }
+      ]
+    });
+    res.json(profiles);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
