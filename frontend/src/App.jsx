@@ -11,7 +11,7 @@ import ViewCV from './components/ViewCV.jsx' // Đảm bảo đã import đúng 
 import './App.css'
 
 function App() {
-  return (
+  return (  
     <WalletProvider>
       <Router>
         <Routes>
@@ -19,15 +19,12 @@ function App() {
           <Route path="/profile" element={<Profile />} />
            <Route path="/viewprofile" element={<ViewProfile />}/>
           <Route path="/sendcv" element={<SendCV />} />
-<<<<<<< HEAD
           
-=======
-          <Route path="/editprofile" element={<EditProfile />} />
+          
           <Route path="/aboutpage" element={<About/>}/>
           
           {/* SỬA TẠI ĐÂY: Thay <About /> bằng <ViewCV /> */}
           <Route path="/viewcv" element={<ViewCV />}/> 
->>>>>>> b5458cbe94caeaa173f327825d5e42c20ae62e4c
         </Routes>
       </Router>
     </WalletProvider>
