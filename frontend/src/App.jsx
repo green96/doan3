@@ -4,10 +4,9 @@ import { WalletProvider } from './context/WalletContext.jsx'
 import Home from './pages/Home'
 import Profile from './pages/Profile/Profile.jsx'
 import ViewProfile from './pages/Profile/ViewProfile.jsx'
- 
 import SendCV from './pages/SendCV.jsx'
 import About from './components/About.jsx'
-import ViewCV from './components/ViewCV.jsx' // Đảm bảo đã import đúng component này
+import ViewCV from './components/ViewCV.jsx'
 import './App.css'
 
 function App() {
@@ -17,7 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
-           <Route path="/viewprofile" element={<ViewProfile />}/>
+          <Route path="/viewprofile" element={<ViewProfile />} />
           <Route path="/sendcv" element={<SendCV />} />
           
           
@@ -25,6 +24,8 @@ function App() {
           
           {/* SỬA TẠI ĐÂY: Thay <About /> bằng <ViewCV /> */}
           <Route path="/viewcv" element={<ViewCV />}/> 
+          <Route path="/aboutpage" element={<About />} />
+          <Route path="/viewcv" element={<ViewCV />} />
         </Routes>
       </Router>
     </WalletProvider>
