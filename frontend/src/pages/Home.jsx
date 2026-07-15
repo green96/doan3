@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Wallet, 
   Menu, 
- 
-   
+  X, // Thêm X icon bị thiếu khi import
   Mail,
   ArrowRight,
   Shield,
@@ -24,6 +23,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
+
 const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [account, setAccount] = useState(null);
@@ -143,33 +143,39 @@ const Home = () => {
   };
 
   // Xử lý upload profile
-const handleProfileUpload = () => {
-  if (!account) {
-    setError("Please connect wallet first!");
-    return;
-  }
-
-  console.log("Upload profile for:", account);
-
-  navigate("/profile");
-};
-  // Xử lý upload CV
- const handleCvUpload = () => {
+  const handleProfileUpload = () => {
     if (!account) {
-        setError("Please connect wallet first!");
-        return;
+      setError("Please connect wallet first!");
+      return;
     }
+    console.log("Upload profile for:", account);
+    navigate("/profile");
+  };
 
+  // Xử lý upload CV
+  const handleCvUpload = () => {
+    if (!account) {
+      setError("Please connect wallet first!");
+      return;
+    }
     console.log("Upload CV for:", account);
-
     navigate("/sendcv");
-};
+  };
+
+  // Xử lý about page
+  const handleAboutPage = () => {
+    if (!account){
+      setError("Please connect your wallet first!");
+      return;
+    }
+    navigate("/aboutpage");
+  };
 
   // Navigation items
   const navItems = [
     { name: 'Home', href: '#' },
     { name: 'Portfolio', href: '#portfolio' },
-    { name: 'About', href: '#about' },
+    { name: 'About', href: '#aboutpage' },
     { name: 'Skills', href: '#skills' },
     { name: 'Projects', href: '#projects' },
     { name: 'Contact', href: '/viewprofile' },
@@ -199,15 +205,28 @@ const handleProfileUpload = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-gray-300 hover:text-purple-400 transition-colors duration-200"
-                >
-                  {item.name}
-                </a>
-              ))}
+              {navItems.map((item) => {
+                if (item.name === 'About') {
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={handleAboutPage}
+                      className="text-gray-300 hover:text-purple-400 transition-colors duration-200 bg-transparent border-none cursor-pointer"
+                    >
+                      {item.name}
+                    </button>
+                  );
+                }
+                return (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="text-gray-300 hover:text-purple-400 transition-colors duration-200"
+                  >
+                    {item.name}
+                  </a>
+                );
+              })}
             </nav>
 
             {/* Wallet & Actions */}
@@ -299,16 +318,32 @@ const handleProfileUpload = () => {
           <div className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-purple-500/20">
             <div className="container mx-auto px-4 py-4">
               <nav className="flex flex-col space-y-4">
-                {navItems.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="text-gray-300 hover:text-purple-400 transition-colors duration-200 py-2"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.name}
-                  </a>
-                ))}
+                {navItems.map((item) => {
+                  if (item.name === 'About') {
+                    return (
+                      <button
+                        key={item.name}
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          handleAboutPage();
+                        }}
+                        className="text-left text-gray-300 hover:text-purple-400 transition-colors duration-200 py-2 bg-transparent border-none cursor-pointer"
+                      >
+                        {item.name}
+                      </button>
+                    );
+                  }
+                  return (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className="text-gray-300 hover:text-purple-400 transition-colors duration-200 py-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.name}
+                    </a>
+                  );
+                })}
                 {account && (
                   <div className="flex flex-col space-y-2 pt-4 border-t border-gray-700">
                     <button
@@ -364,7 +399,7 @@ const handleProfileUpload = () => {
                 and build your decentralized identity on the blockchain.
               </p>
 
-              {/*thêm hover:scale-110 hover:shadow-xl cho button*/}
+              {/* Action Buttons */}
               <div className="flex flex-wrap gap-4">
                 {!account && (
                   <button
@@ -393,13 +428,22 @@ const handleProfileUpload = () => {
                     </button>
                   </>
                 )}
-                <a
-                  href="#portfolio"
-                  className="px-6 py-3 border border-purple-500/50 text-purple-400 rounded-lg hover:bg-purple-500/10 transition-all duration-200 flex items-center space-x-2 hover:scale-110 hover:shadow-xl"
+
+                {/* Nút đã được chỉnh sửa để chuyển hướng qua trang ViewCV */}
+              <div></div>
+                <button
+                  onClick={() => {
+                    if (!account) {
+                      setError("Please connect your wallet first!");
+                      return;
+                    }
+                    navigate("/viewcv");
+                  }}
+                  className="px-6 py-3 border border-purple-500/50 text-purple-400 rounded-lg hover:bg-purple-500/10 transition-all duration-200 flex items-center space-x-2 hover:scale-110 hover:shadow-xl cursor-pointer"
                 >
                   <span>Explore Portfolios</span>
                   <ArrowRight className="w-5 h-5" />
-                </a>
+                </button>
               </div>
 
               {error && (
@@ -513,21 +557,6 @@ const handleProfileUpload = () => {
               <Shield className="w-6 h-6 text-purple-500" />
               <span className="text-white font-semibold">BlockPortfolio</span>
             </div>
-            
-            {/* <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">
-                <Github className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">
-                <Mail className="w-5 h-5" />
-              </a>
-            </div> */}
             
             <p className="text-sm text-gray-400 mt-4 md:mt-0">
               © 2024 BlockPortfolio. Built with ❤️ on Web3
