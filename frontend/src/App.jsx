@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Profile from './pages/Profile/Profile.jsx'
 import EditProfile from './pages/Profile/EditProfile.jsx'
 import SendCV from './pages/SendCV.jsx'
+import About from './components/About.jsx'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/sendcv" element={<SendCV />} />
           <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/aboutpage" element={<About/>}/>
         </Routes>
       </Router>
     </WalletProvider>

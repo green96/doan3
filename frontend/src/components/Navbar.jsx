@@ -6,14 +6,27 @@ import {
     FaUser,
     FaSignOutAlt,
     FaHome,
-    FaUserCircle
+    FaUserCircle,
+    FaInfoCircle // Thêm icon cho About nếu muốn
 } from 'react-icons/fa';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate
 import './Navbar.css';
 
 function Navbar() {
     const { wallet, isConnected, connect, disconnect, isConnecting } = useWallet();
     const location = useLocation();
+    const navigate = useNavigate(); // Khai báo navigate
+
+    // Đưa hàm xử lý vào trong component
+    const handleAboutPage = (e) => {
+        e.preventDefault();
+        // Kiểm tra kết nối ví thông qua isConnected của WalletContext
+        if (!isConnected) {
+            alert("Please connect your wallet first!");
+            return;
+        }
+        navigate("/aboutpage");
+    };
 
     return (
         <nav className="navbar">
@@ -30,6 +43,15 @@ function Navbar() {
                     >
                         <FaHome /> Home
                     </Link>
+
+                    {/* Thêm link About vào đây */}
+                    <a 
+                        href="/aboutpage" 
+                        onClick={handleAboutPage}
+                        className={location.pathname === '/aboutpage' ? 'active' : ''}
+                    >
+                        <FaInfoCircle /> About
+                    </a>
 
                     {isConnected && (
                         <>
