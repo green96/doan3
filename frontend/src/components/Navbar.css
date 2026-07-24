@@ -1,119 +1,117 @@
 :root {
+   /*Tất cả các biến chứa màu*/
   --bg-dark: #0d0e12;
   --bg-card: #181920;
   --text-main: #ffffff;
   --text-muted: #a0aec0;
-  --primary-color: #f6851b; /* Màu cam MetaMask */
+  --primary-color: #f6851b;
   --primary-hover: #e27613;
   --danger-color: #ff4a4a;
   --border-color: #2d3139;
   --transition-speed: 0.3s;
 }
 
-/* Base Navbar Styling */
+/* ─── Base ───────────────────────────────────────────── */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(13, 14, 18, 0.85);
-  backdrop-filter: blur(10px); /* Hiệu ứng kính mờ thịnh hành */
+  background-color: rgba(13, 14, 18, 0.92);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-color);
   z-index: 1000;
   box-sizing: border-box;
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
-  height: 70px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
 }
 
-/* Logo Section */
+/* ─── Logo ───────────────────────────────────────────── */
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
   text-decoration: none;
   color: var(--text-main);
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
 .nav-logo img {
-  height: 32px;
+  height: 28px;
   width: auto;
 }
 
-/* Navigation Links */
+/* ─── Nav Links ──────────────────────────────────────── */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
+  flex-wrap: nowrap;
 }
 
-.nav-links a {
+/* áp dụng cho cả <a> lẫn <Link> (render ra <a>) */
+.nav-links a,
+.nav-links .nav-link-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   color: var(--text-muted);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
   transition: color var(--transition-speed) ease;
 }
 
 .nav-links a:hover,
-.nav-links a.active {
+.nav-links a.active,
+.nav-links .nav-link-item:hover,
+.nav-links .nav-link-item.active {
   color: var(--primary-color);
 }
 
-.nav-links a svg {
-  font-size: 1.1rem;
+.nav-links a svg,
+.nav-links .nav-link-item svg {
+  font-size: 1rem;
+  flex-shrink: 0;
 }
 
-/* Wallet Area Styling */
+/* ─── Wallet ─────────────────────────────────────────── */
 .nav-wallet {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
-/* Nút Connect MetaMask */
 .connect-btn {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   background-color: var(--primary-color);
   color: #fff;
   border: none;
-  padding: 0.6rem 1.2rem;
+  padding: 0.55rem 1rem;
   border-radius: 12px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   cursor: pointer;
+  white-space: nowrap;
   transition: background-color var(--transition-speed) ease, transform 0.1s ease;
-}
-
-
-/*tạo button connect Rung lắc*/
-.animate-wiggle {
-  animation: wiggle 0.8s ease-in-out infinite;
-}
-
-@keyframes wiggle {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-3px) rotate(-2deg);
-  }
-  75% {
-    transform: translateX(3px) rotate(2deg);
-  }
 }
 
 .connect-btn:hover:not(:disabled) {
@@ -131,32 +129,41 @@
   cursor: not-allowed;
 }
 
-/* Giao diện khi đã kết nối ví */
+.animate-wiggle {
+  animation: wiggle 0.8s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-3px) rotate(-2deg); }
+  75%       { transform: translateX(3px) rotate(2deg); }
+}
+
 .wallet-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
-  padding: 0.4rem 0.4rem 0.4rem 1rem;
+  padding: 0.35rem 0.35rem 0.35rem 0.85rem;
   border-radius: 14px;
 }
 
 .wallet-address {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   color: var(--text-main);
-  font-size: 0.9rem;
-  font-family: 'Courier New', Courier, monospace; /* Font monospace giúp xem địa chỉ ví đẹp hơn */
+  font-size: 0.85rem;
+  font-family: 'Courier New', Courier, monospace;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .wallet-address svg {
   color: var(--primary-color);
 }
 
-/* Nút Disconnect */
 .disconnect-btn {
   display: flex;
   align-items: center;
@@ -164,7 +171,7 @@
   background-color: rgba(255, 74, 74, 0.1);
   color: var(--danger-color);
   border: 1px solid rgba(255, 74, 74, 0.2);
-  padding: 0.5rem;
+  padding: 0.45rem;
   border-radius: 10px;
   cursor: pointer;
   transition: all var(--transition-speed) ease;
@@ -173,4 +180,125 @@
 .disconnect-btn:hover {
   background-color: var(--danger-color);
   color: #fff;
+}
+
+/* ─── Hamburger ──────────────────────────────────────── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--text-main);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.nav-hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.nav-hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ─── 1280 × 720 ─────────────────────────────────────── */
+@media (max-width: 1280px) {
+  .nav-container {
+    max-width: 100%;
+    padding: 0 1.25rem;
+  }
+  .nav-links { gap: 1.1rem; }
+  .nav-links a,
+  .nav-links .nav-link-item { font-size: 0.85rem; }
+  .connect-btn { font-size: 0.82rem; padding: 0.5rem 0.85rem; }
+}
+
+/* ─── Tablet ≤ 1024px ────────────────────────────────── */
+@media (max-width: 1024px) {
+  .nav-links { gap: 0.9rem; }
+  .nav-links a,
+  .nav-links .nav-link-item { font-size: 0.82rem; }
+  .nav-logo span { font-size: 1rem; }
+}
+
+/* ─── Mobile ≤ 768px ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-container {
+    height: 60px;
+    padding: 0 1rem;
+  }
+
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background-color: rgba(13, 14, 18, 0.97);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem 0;
+    z-index: 999;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  /* Tất cả link trong menu mobile đều căn đều */
+  .nav-links a,
+  .nav-links .nav-link-item {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+    border-bottom: 1px solid var(--border-color);
+    justify-content: flex-start;
+  }
+
+  .nav-links a:last-child,
+  .nav-links .nav-link-item:last-child {
+    border-bottom: none;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  /* Ẩn text nút Connect, chỉ hiện icon */
+  .connect-btn .btn-text {
+    display: none;
+  }
+  .connect-btn {
+    padding: 0.55rem 0.7rem;
+    border-radius: 10px;
+  }
+
+  .wallet-address span {
+    display: none;
+  }
+  .wallet-info {
+    padding: 0.35rem;
+  }
+}
+
+/* ─── Small mobile ≤ 480px ───────────────────────────── */
+@media (max-width: 480px) {
+  .nav-logo span {
+    display: none;
+  }
 }

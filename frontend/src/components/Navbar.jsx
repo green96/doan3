@@ -1,4 +1,5 @@
 // frontend/src/components/Navbar.jsx
+import { useState } from 'react';
 import { useWallet } from '../context/WalletContext';
 import { formatAddress } from '../utils/wallet';
 import {
@@ -7,46 +8,51 @@ import {
     FaSignOutAlt,
     FaHome,
     FaUserCircle,
-    FaInfoCircle // Thêm icon cho About nếu muốn
+    FaInfoCircle,
 } from 'react-icons/fa';
-import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 function Navbar() {
     const { wallet, isConnected, connect, disconnect, isConnecting } = useWallet();
     const location = useLocation();
-    const navigate = useNavigate(); // Khai báo navigate
+    const navigate = useNavigate();
+    const [menuOpen, setMenuOpen] = useState(false);
 
-    // Đưa hàm xử lý vào trong component
+    const closeMenu = () => setMenuOpen(false);
+
     const handleAboutPage = (e) => {
         e.preventDefault();
-        // Kiểm tra kết nối ví thông qua isConnected của WalletContext
         if (!isConnected) {
-            alert("Please connect your wallet first!");
+            alert('Please connect your wallet first!');
             return;
         }
-        navigate("/aboutpage");
+        closeMenu();
+        navigate('/aboutpage');
     };
 
     return (
         <nav className="navbar">
             <div className="nav-container">
-                <Link to="/" className="nav-logo">
+                {/* Logo */}
+                <Link to="/" className="nav-logo" onClick={closeMenu}>
                     <img src="/logo.svg" alt="Logo" />
                     <span>Web3 Portfolio</span>
                 </Link>
 
-                <div className="nav-links">
+                {/* Nav links */}
+                <div className={`nav-links${menuOpen ? ' open' : ''}`}>
                     <Link
                         to="/"
                         className={location.pathname === '/' ? 'active' : ''}
+                        onClick={closeMenu}
                     >
                         <FaHome /> Home
                     </Link>
 
-                    {/* Thêm link About vào đây */}
-                    <a 
-                        href="/aboutpage" 
+                    {/* About — dùng <a> thường để tránh lỗi Link thiếu prop "to" */}
+                    <a
+                        href="/aboutpage"
                         onClick={handleAboutPage}
                         className={location.pathname === '/aboutpage' ? 'active' : ''}
                     >
@@ -58,49 +64,64 @@ function Navbar() {
                             <Link
                                 to="/profile"
                                 className={location.pathname === '/profile' ? 'active' : ''}
+                                onClick={closeMenu}
                             >
                                 <FaUserCircle /> My Profile
                             </Link>
                             <Link
                                 to="/sendcv"
                                 className={location.pathname === '/sendcv' ? 'active' : ''}
+                                onClick={closeMenu}
                             >
                                 <FaUserCircle /> Send CV
                             </Link>
                         </>
                     )}
 
-                    <a href="#features">Features</a>
+                    <a href="#features" onClick={closeMenu}>Features</a>
                 </div>
 
-                <div className="nav-wallet">
-                    {!isConnected ? (
-                        <button
-                            className="connect-btn duration-300 ease-in"
-                            onClick={connect}
-                            disabled={isConnecting}
-                        >
-                            <FaWallet />
-                            {isConnecting
-                                ? 'Connecting...'
-                                : 'Connect MetaMask'}
-                        </button>
-                    ) : (
-                        <div className="wallet-info">
-                            <div className="wallet-address">
-                                <FaUser />
-                                <span>{formatAddress(wallet.address)}</span>
-                            </div>
-
+                {/* Wallet + Hamburger */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div className="nav-wallet">
+                        {!isConnected ? (
                             <button
-                                className="disconnect-btn"
-                                onClick={disconnect}
-                                title="Disconnect Wallet"
+                                className="connect-btn"
+                                onClick={connect}
+                                disabled={isConnecting}
                             >
-                                <FaSignOutAlt />
+                                <FaWallet />
+                                <span className="btn-text">
+                                    {isConnecting ? 'Connecting...' : 'Connect MetaMask'}
+                                </span>
                             </button>
-                        </div>
-                    )}
+                        ) : (
+                            <div className="wallet-info">
+                                <div className="wallet-address">
+                                    <FaUser />
+                                    <span>{formatAddress(wallet?.address)}</span>
+                                </div>
+                                <button
+                                    className="disconnect-btn"
+                                    onClick={disconnect}
+                                    title="Disconnect Wallet"
+                                >
+                                    <FaSignOutAlt />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Hamburger — chỉ hiện trên mobile */}
+                    <button
+                        className={`nav-hamburger${menuOpen ? ' open' : ''}`}
+                        onClick={() => setMenuOpen((prev) => !prev)}
+                        aria-label="Toggle menu"
+                    >
+                        <span />
+                        <span />
+                        <span />
+                    </button>
                 </div>
             </div>
         </nav>
