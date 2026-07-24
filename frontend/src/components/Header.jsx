@@ -39,12 +39,15 @@ const Header = ({ navItems = [], onProfileUpload, onCvUpload }) => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => {
+              const href = item.path || item.href;
+              const linkClass = "text-gray-300 hover:text-purple-400 transition-colors duration-200 bg-transparent border-none cursor-pointer text-sm font-medium";
+
               if (item.isButton) {
                 return (
                   <button
                     key={item.name}
-                    onClick={() => handleNavigation(item.path)}
-                    className="text-gray-300 hover:text-purple-400 transition-colors duration-200 bg-transparent border-none cursor-pointer"
+                    onClick={() => handleNavigation(href)}
+                    className={linkClass}
                   >
                     {item.name}
                   </button>
@@ -53,12 +56,12 @@ const Header = ({ navItems = [], onProfileUpload, onCvUpload }) => {
               return (
                 <a
                   key={item.name}
-                  href={item.path}
-                  className="text-gray-300 hover:text-purple-400 transition-colors duration-200"
+                  href={href}
+                  className={linkClass}
                   onClick={(e) => {
-                    if (item.path?.startsWith('/')) {
+                    if (href?.startsWith('/')) {
                       e.preventDefault();
-                      navigate(item.path);
+                      navigate(href);
                     }
                   }}
                 >
@@ -130,7 +133,7 @@ const Header = ({ navItems = [], onProfileUpload, onCvUpload }) => {
               <button
                 onClick={connectWallet}
                 disabled={isConnecting}
-                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 disabled:opacity-50 hover:scale-110 hover:shadow-xl"
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 disabled:opacity-50 hover:scale-110 hover:shadow-xl always-wiggle"
               >
                 {isConnecting ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -156,17 +159,21 @@ const Header = ({ navItems = [], onProfileUpload, onCvUpload }) => {
       {isMenuOpen && (
         <div className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-purple-500/20">
           <div className="container mx-auto px-4 py-4">
-            <nav className="flex flex-col space-y-4">
+            <nav className="flex flex-col">
               {navItems.map((item) => {
+                // Dùng chung 1 class để tất cả link/button đều thẳng hàng
+                const itemClass =
+                  "w-full text-left text-gray-300 hover:text-purple-400 transition-colors duration-200 py-3 px-2 border-b border-gray-800 last:border-b-0 bg-transparent border-none cursor-pointer text-base";
+
                 if (item.isButton) {
                   return (
                     <button
                       key={item.name}
                       onClick={() => {
                         setIsMenuOpen(false);
-                        handleNavigation(item.path);
+                        handleNavigation(item.path || item.href);
                       }}
-                      className="text-left text-gray-300 hover:text-purple-400 transition-colors duration-200 py-2 bg-transparent border-none cursor-pointer"
+                      className={itemClass}
                     >
                       {item.name}
                     </button>
@@ -175,13 +182,14 @@ const Header = ({ navItems = [], onProfileUpload, onCvUpload }) => {
                 return (
                   <a
                     key={item.name}
-                    href={item.path}
-                    className="text-gray-300 hover:text-purple-400 transition-colors duration-200 py-2"
+                    href={item.path || item.href}
+                    className={itemClass}
                     onClick={(e) => {
-                      if (item.path?.startsWith('/')) {
+                      const href = item.path || item.href;
+                      if (href?.startsWith('/')) {
                         e.preventDefault();
                         setIsMenuOpen(false);
-                        navigate(item.path);
+                        navigate(href);
                       }
                     }}
                   >
